@@ -1,5 +1,6 @@
 package com.icapps.background_location_tracker.flutter
 
+import android.provider.Settings
 import android.content.Context
 import android.location.Location
 import android.os.Build
@@ -68,6 +69,14 @@ internal object FlutterBackgroundManager {
         data["speed"] = if (location.hasSpeed()) location.speed else -1.0
         data["speed_accuracy"] = -1.0
         data["logging_enabled"] = SharedPrefsUtil.isLoggingEnabled(ctx)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            data["isMock"] = location.isMock()
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            data["isMock"] = location.isFromMockProvider
+        } else {
+            data["isMock"] = !Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             data["vertical_accuracy"] = if (location.hasVerticalAccuracy()) location.verticalAccuracyMeters else -1.0
