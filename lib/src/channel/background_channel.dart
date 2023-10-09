@@ -46,7 +46,7 @@ class BackgroundChannel {
         data['course_accuracy'] as double; // ignore: avoid_as
     final speed = data['speed'] as double; // ignore: avoid_as
     final speedAccuracy = data['speed_accuracy'] as double; // ignore: avoid_as
-    final isMock = data['isMock'] as bool; // ignore: avoid_as
+    final isMock = (data['isMock'] ?? false) as bool; // ignore: avoid_as
     await callback(BackgroundLocationUpdateData(
         lat: lat,
         lon: lon,
